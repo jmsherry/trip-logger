@@ -9,12 +9,15 @@ import theme from "./theme";
 
 // Layout
 import PageLayout from "./components/PageLayout";
+import ProtectedRoute from "./components/ProtectedRoute";
 // import ErrorBoundary from "./components/ErrorBoundary";
 
 // Pages
 import Home from "./pages/Home";
 import NotFound from "./pages/NotFound";
 import Profile from "./pages/Profile";
+import Trips from "./pages/Trips";
+import AddTrips from "./pages/AddTrips";
 
 // Data Contexts
 // import { CarsProvider } from "./contexts/car.context";
@@ -41,7 +44,42 @@ function App() {
             <Routes>
               <Route path="/" element={<PageLayout />}>
                 <Route index element={<Home />} />
-                <Route path="profile" element={<Profile />} />
+                <Route
+                  path="profile"
+                  element={
+                    <ProtectedRoute>
+                      <Profile />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="trips"
+                  element={
+                    <ProtectedRoute>
+                      <Trips />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="trips/add"
+                  element={
+                    <ProtectedRoute>
+                      <AddTrips />
+                    </ProtectedRoute>
+                  }
+                />
+                {/* <ProtectedRoute
+                  path="profile"
+                  component={Profile}
+                />
+                <ProtectedRoute
+                  path="trips"
+                  component={Trips}
+                />
+                <ProtectedRoute
+                  path="trips/add"
+                  component={AddTrips}
+                /> */}
                 {/* <Route path="add" element={<AddCar />} />
                 <Route path="update/:id" element={<UpdateCar />} /> */}
                 <Route path="*" element={<NotFound />} />
