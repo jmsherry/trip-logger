@@ -5,9 +5,12 @@
 - To allow a person to log their trips to different countries (MVP)
 - To allow them to see which countries they have left to visit \*
 
-          server            client
-DEV:      nodemon           vite-dev-server
-PROD:     node              *static file served*
+| Environment |  Server  |  Client |
+|---------------|-------------|------|
+| DEV: |  nodemon | vite-dev-server |
+| PROD: |    node   |   *static file served* |
+
+
 
 ## Data Shapes
 
