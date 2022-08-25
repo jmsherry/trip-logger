@@ -5,14 +5,8 @@ import app from "./server.js";
 
 const { PORT = 4000 } = process.env;
 
-const __dirname = url.fileURLToPath(new URL(".", import.meta.url));
-global.__basedir = __dirname; // Make a reference to your project's base directory
-// const yourModule = require(__basedir + '/path/to/module.js');
-// import yourModule from `${__basedir}/path/to/module.js`
-// or use https://github.com/sindresorhus/pkg-dir
-
 const server = app.listen(PORT, () => {
-  console.log(`Listening on http://127.0.0.1:${PORT}`);
+  console.log(`Listening on http://localhost:${PORT}`);
 });
 
 process.on("uncaughtException", (err) => {
