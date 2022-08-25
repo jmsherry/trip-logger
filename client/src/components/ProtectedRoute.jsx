@@ -3,7 +3,7 @@
 // );
 
 import React from "react";
-import { Route, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import intersection from "lodash.intersection";
 
