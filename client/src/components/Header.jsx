@@ -16,7 +16,14 @@ function Header() {
       <AppBar position="static">
         <Toolbar>
           <Button
-            sx={{ my: 2, color: "white", display: "block" }}
+            sx={{
+              my: 2,
+              color: "white",
+              display: "block",
+              "&:hover": {
+                color: "#f55",
+              },
+            }}
             component={NavLink}
             to="/"
           >

@@ -1,8 +1,12 @@
 import React, {useState, useEffect} from 'react'
+import TripForm from '../components/forms/TripForm'
 
 function Trips() {
   return (
-    <div>Trips</div>
+    <div>
+      <h1>Add a Trip</h1>
+      <TripForm />
+    </div>
   )
 }
 

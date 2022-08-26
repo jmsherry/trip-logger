@@ -1,8 +1,9 @@
 import Trip from "../models/trip.model.js";
+import User from "../models/user.model.js";
 // const { errorHandler } = require("./utils");
 // const logger = require("./../logger");
 
-function errorHandler (res, err) {
+function errorHandler(res, err) {
   console.log(err);
   res.status(500).send(err);
 }
@@ -23,15 +24,17 @@ export function getTrips(req, res) {
 }
 
 export function getUsersTrips(req, res) {
+  console.log(req.user);
   let query = {
-    customerID: req.user.sub, // ensure own trips only
+    sub: req.user.sub, // ensure own trips only
   };
 
   if (req.params.id) {
     query._id = req.params.id;
   }
+
   Trip.find(query)
-    // .populate("items")
+    .populate("place")
     .exec((err, trips) => {
       if (err) return errorHandler(res, err);
       if (req.params.id && trips.length === 0)
@@ -41,15 +44,15 @@ export function getUsersTrips(req, res) {
 }
 
 export function getOwnTrips(req, res) {
-  let query = {
-    customerID: req.user.sub, // ensure own trips only
+  const query = {
+    sub: req.user.sub, // ensure own trips only
   };
 
   if (req.params.id) {
     query._id = req.params.id;
   }
   Trip.find(query)
-    // .populate("items")
+    .populate("place")
     .exec((err, trips) => {
       if (err) return errorHandler(res, err);
       if (req.params.id && trips.length === 0)
@@ -58,22 +61,61 @@ export function getOwnTrips(req, res) {
     });
 }
 
-export function addTrip(req, res) {
-  const tripData = req.body;
-  console.log(`tripData`, tripData);
-  const newTrip = new Trip(tripData);
-  newTrip.save((err, trip) => {
+export async function addTrip(req, res) {
+  // get the user (create if not exist)
+  if (!req.user) return errorHandler(res, new Error("No user provided"));
+  const Auth0ID = req.user.sub;
+
+  let user = await User.findOne({ sub: Auth0ID });
+
+  if (!user) {
+    user = await User.create({ sub: Auth0ID });
+  }
+  // create a trip
+  const trip = await Trip.create({
+    user: user._id,
+    ...req.body,
+  });
+  // put OID into user trips array and save
+  user.trips.push(trip._id);
+  user.save((err) => {
     if (err) return errorHandler(res, err);
     return res.status(201).json(trip);
   });
 }
 
-export function addOwnTrip(req, res) {
-  // { items: [{}, {}], customerID: '23k42lj34278' }
-  const tripData = { ...req.body, customerID: req.user.sub };
-  console.log(`tripData ${tripData}`);
-  const newTrip = new Trip(tripData);
-  newTrip.save((err, trip) => {
+export async function addOwnTrip(req, res) {
+  // get the user (create if not exist)
+  console.log("req.user", req.user);
+  if (!req.user) return errorHandler(res, "No user provided");
+  const Auth0ID = req.user.sub;
+  console.log(
+    "🚀 ~ file: trips.controller.js ~ line 91 ~ addOwnTrip ~ Auth0ID",
+    Auth0ID
+  );
+
+  let user = await User.findOne({ sub: Auth0ID });
+  console.log(
+    "🚀 ~ file: trips.controller.js ~ line 94 ~ addOwnTrip ~ user",
+    user
+  );
+
+  if (!user) {
+    console.log("creating user");
+    user = await User.create({ sub: Auth0ID });
+  }
+
+  // create a trip
+  const trip = await Trip.create({
+    user: user._id,
+    ...req.body,
+  });
+  console.log(trip);
+  // put OID into user trips array and save
+  user.trips.push(trip._id);
+  console.log("created user with new trip", user);
+
+  user.save((err) => {
     if (err) return errorHandler(res, err);
     return res.status(201).json(trip);
   });

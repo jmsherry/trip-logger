@@ -2,29 +2,34 @@
 import express from 'express';
 
 import {
-  getTrips,
-  addTrip,
-  updateTrip,
-  removeTrip,
+  // getTrips,
+  // addTrip,
+  // updateTrip,
+  // removeTrip,
   getUsersTrips,
   // getOwnTrips,
-  // addOwnTrip,
+  addOwnTrip,
   // updateOwnTrip,
   // removeOwnTrip,
 } from "../controllers/trips.controller.js";
 
+import { checkJwt } from '../auth0/authz.middleware.js';
+
 const router = express.Router();
 
+
+
 router
+  // .get(
+  //   "/:id?",
+  //   getTrips
+  // )
   .get(
-    "/:id?",
-    getTrips
-  )
-  .get(
-    "/user/:userid",
+    "/",
+    checkJwt,
     getUsersTrips
   )
-  // .post("/", addTrip)
+  .post("/", checkJwt, addOwnTrip)
   // .put("/:id", updateTrip)
   // .delete("/:id", removeTrip)
   

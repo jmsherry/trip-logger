@@ -2,13 +2,22 @@ import React from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import intersection from "lodash.intersection";
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
 
 const ProtectedRoute = ({
   children,
   permissions: requiredPerms = [],
 }) => {
   let authd = false;
-  const { user } = useAuth0();
+  const { user, isLoading } = useAuth0();
+  if(isLoading) {
+    return (
+      <Box sx={{ display: 'flex' }}>
+        <CircularProgress />
+      </Box>
+    );
+  }
   if (user) {
     const domainPerms = user[`${window.location.origin}/user_authorization`];
     if (!requiredPerms.length) {

@@ -1,0 +1,5 @@
+{
+  "domain": "js6.auth0.com",
+  "clientId": "BznuJgoxLjfN2F0lySFYLIC0w3mKVgwB",
+  "audience": "https://trip-logger.herokuapp.com/api/v1"
+}

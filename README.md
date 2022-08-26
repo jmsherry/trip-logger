@@ -40,3 +40,10 @@
 #### ENV VARS
 MONGODB_URI (from Atlas)
 NPM_CONFIG_PRODUCTION false
+
+
+#### Express JWT FIX
+```bash
+npm uninstall express-jwt jwks-rsa
+npm i express-jwt@^6.0.0 jwks-rsa@^2.0.1
+```

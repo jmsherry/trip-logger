@@ -4,6 +4,9 @@ import usersRouter from "./users.router.js";
 import tripsRouter from "./trips.router.js";
 
 const { NODE_ENV = "development" } = process.env;
+import * as url from 'url';
+// const __filename = url.fileURLToPath(import.meta.url);
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
 
 export default function setupRoutes(app) {
   const API_ENDPOINT = "/api";

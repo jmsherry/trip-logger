@@ -6,6 +6,7 @@ let theme = createTheme({
   palette: {
     primary: {
       main: red[900],
+      contrastText: '#fff'
     },
     secondary: {
       main: red[50],
