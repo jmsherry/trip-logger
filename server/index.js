@@ -10,7 +10,7 @@ const server = app.listen(PORT, () => {
 });
 
 process.on("uncaughtException", (err) => {
-  console.log(err);
+  console.log('uncaughtException', err);
   // attempt a gracefully shutdown
   server.close(() => {
     process.exit(1); // then exit
@@ -24,7 +24,7 @@ process.on("uncaughtException", (err) => {
 });
 
 process.on("unhandledRejection", (reason, promise) => {
-  console.log(reason);
+  console.log('unhandledRejection', reason);
 
   server.close(() => {
     process.exit(1);

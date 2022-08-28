@@ -18,10 +18,10 @@ const options = {};
 try {
   await mongoose.connect(MONGODB_URI, options);
 } catch (error) {
-  console.log(error);
+  console.log('dbconerr', error);
 }
 
 mongoose.connection.on('error', err => {
-  console.log(err);
+  console.log('dbpostconnerr', err);
 });
 
