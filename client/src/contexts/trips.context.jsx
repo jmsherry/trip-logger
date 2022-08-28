@@ -1,6 +1,7 @@
 import React, { createContext, useState, useCallback, useContext } from "react";
 import { UIContext } from "./ui.context";
 import { AuthContext } from "./auth.context";
+import { PlacesContext } from "./places.context";
 
 let headers = {
   "Content-Type": "application/json",
@@ -22,7 +23,8 @@ export const TripsContext = createContext({
 export const TripsProvider = (props) => {
   const { accessToken } = useContext(AuthContext);
   const { showMessage } = useContext(UIContext);
-
+  const { places } = useContext(PlacesContext);
+  console.log("places", places);
   const [state, setState] = useState({
     loading: false,
     loaded: false,
@@ -67,8 +69,8 @@ export const TripsProvider = (props) => {
   const fetchTrips = useCallback(async () => {
     // console.log('loading', loading);
     // console.log('error', error);
-    // console.log('fetchTrips called');
-    // console.log("accessToken", accessToken);
+    console.log("fetchTrips called");
+    console.log("accessToken", accessToken);
 
     const { loading, loaded, error } = state;
 
@@ -104,6 +106,7 @@ export const TripsProvider = (props) => {
       if (!accessToken) return;
       console.log("headers", headers);
       console.log("accessToken", accessToken);
+      const fullPlace = places.find(({ _id }) => _id === formData.place);
       setLoading();
       const { trips } = state;
       try {
@@ -117,12 +120,20 @@ export const TripsProvider = (props) => {
         }
         const savedTrip = await response.json();
         console.log("got data", savedTrip);
+
+        savedTrip.place = fullPlace;
         setTrips([...trips, savedTrip]);
-        showMessage({ type: "success", message: `Added ${savedTrip.place}` });
+        showMessage({
+          type: "success",
+          message: `Added ${savedTrip.place.name.common}`,
+        });
       } catch (err) {
         console.log(err);
         setState(err);
-        showMessage({ type: "error", message: `Error: Failed to add trip` });
+        showMessage({
+          type: "error",
+          message: `Error: Failed to add trip to ${fullPlace.name.common}`,
+        });
       }
     },
     [accessToken, /*addToast,*/ setLoading, setTrips, state]
@@ -174,13 +185,16 @@ export const TripsProvider = (props) => {
           updatedTrips
         );
         setTrips(updatedTrips);
-        showMessage({ type: "success", message: `Updated ${newTrip.place}` });
+        showMessage({
+          type: "success",
+          message: `Updated ${newTrip.place.name.common}`,
+        });
       } catch (err) {
         console.log(err);
         setError(err);
         showMessage({
           type: "error",
-          message: `Error: Failed to update ${newTrip.place}`,
+          message: `Error: Failed to update ${newTrip.place.name.common}`,
         });
       }
     },
@@ -213,14 +227,14 @@ export const TripsProvider = (props) => {
         setTrips(updatedTrips);
         showMessage({
           type: "success",
-          message: `Deleted ${deletedTrip.place}`,
+          message: `Deleted ${deletedTrip.place.name.common}`,
         });
       } catch (err) {
         console.log(err);
         setError(err);
         showMessage({
           type: "error",
-          message: `Error: Failed to delete ${deletedTrip.place}`,
+          message: `Error: Failed to delete ${deletedTrip.place.name.common}`,
         });
       }
     },

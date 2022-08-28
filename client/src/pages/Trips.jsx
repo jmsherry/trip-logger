@@ -9,6 +9,7 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
+import EB from "../components/ErrorBoundary";
 
 function Trips() {
   const { fetchTrips, trips, loaded, loading, deleteTrip } =
@@ -23,46 +24,47 @@ function Trips() {
   });
 
   return (
-    <div>
-      <h1>Trips</h1>
-      {/* <pre>
+    <EB>
+      <div>
+        <Typography variant="h1">Trips</Typography>
+        {/* <pre>
         <code>{JSON.stringify({ trips, loaded, loading })}</code>
       </pre> */}
-      <div>
-        <Button
-          sx={{
-            my: 2,
-            "&:hover": {
-              color: "white",
-            },
-          }}
-          component={Link}
-          to="/trips/add"
-          primary="true"
-          variant="contained"
-        >
-          Add a trip!
-        </Button>
+        <div>
+          <Button
+            sx={{
+              my: 2,
+              "&:hover": {
+                color: "white",
+              },
+            }}
+            component={Link}
+            to="/trips/add"
+            primary="true"
+            variant="contained"
+          >
+            Add a trip!
+          </Button>
+        </div>
+        {trips?.length === 0 && <p>No trips listed</p>}
+        <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+          <List>
+            {trips.map(({ date, place, _id }) => (
+              <ListItem disablePadding key={_id}>
+                {place.name.common} (Date: {dayjs(date).format("DD/MM/YYYY")})
+                <IconButton
+                  aria-label="delete"
+                  color="primary"
+                  onClick={() => deleteTrip(_id)}
+                >
+                  <DeleteIcon />
+                </IconButton>
+              </ListItem>
+            ))}
+          </List>
+        </Box>
       </div>
-      {trips.length === 0 && <p>No trips listed</p>}
-      <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
-        <List>
-        {trips.map(({ date, place, _id }) => (
-          <ListItem disablePadding key={_id}>
-            {place.name.common} (Date: {dayjs(date).format("DD/MM/YYYY")})
-            <IconButton
-              aria-label="delete"
-              color="primary"
-              onClick={() => deleteTrip(_id)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </ListItem>
-        ))}
-        </List>
-      </Box>
-
-    </div>
+    </EB>
   );
 }
 

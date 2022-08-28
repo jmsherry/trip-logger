@@ -48,7 +48,7 @@ function TripForm() {
     )?._id;
     console.log("re-formatted formValues", formValues);
     addTrip(formValues);
-    // reset(defaultValues);
+    reset(defaultValues);
   };
 
   useEffect(() => {

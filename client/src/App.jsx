@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from "@mui/material/styles";
 import CssBaseline from "@mui/material/CssBaseline";
 import { Auth0Provider } from "@auth0/auth0-react";
 
@@ -11,7 +11,7 @@ import theme from "./theme";
 import PageLayout from "./components/PageLayout";
 import ProtectedRoute from "./components/ProtectedRoute";
 import Auth0Wrapper from "./components/Auth0Wrapper";
-// import ErrorBoundary from "./components/ErrorBoundary";
+import EB from "./components/ErrorBoundary";
 
 // Pages
 import Home from "./pages/Home";
@@ -79,7 +79,9 @@ function App() {
                               path="trips"
                               element={
                                 <ProtectedRoute>
-                                  <Trips />
+                                  <EB>
+                                    <Trips />
+                                  </EB>
                                 </ProtectedRoute>
                               }
                             />

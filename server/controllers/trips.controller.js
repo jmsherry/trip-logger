@@ -76,10 +76,13 @@ export async function addTrip(req, res) {
     user: user._id,
     ...req.body,
   });
+
+  // await trip.populate(["place"]);
   // put OID into user trips array and save
   user.trips.push(trip._id);
   user.save((err) => {
     if (err) return errorHandler(res, err);
+
     return res.status(201).json(trip);
   });
 }
@@ -113,12 +116,13 @@ export async function addOwnTrip(req, res) {
   console.log(trip);
   // put OID into user trips array and save
   user.trips.push(trip._id);
-  console.log("created user with new trip", user);
 
+  // await trip.populate(["place"]);
   user.save((err) => {
     if (err) return errorHandler(res, err);
     return res.status(201).json(trip);
   });
+  console.log("updated user with new trip", user);
 }
 
 export function updateTrip(req, res) {
