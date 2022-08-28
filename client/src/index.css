@@ -1,6 +1,6 @@
 :root {
   font-family: Inter, Avenir, Helvetica, Arial, sans-serif;
-  font-size: 16px;
+  font-size: 62.5%;
   line-height: 24px;
   font-weight: 400;
 
@@ -30,6 +30,7 @@ body {
   place-items: center;
   min-width: 320px; */
   min-height: 100vh;
+  font-size: 1.6rem;
 }
 
 h1 {
@@ -67,4 +68,8 @@ button:focus-visible {
   button {
     background-color: #f9f9f9;
   }
+}
+
+p {
+  font-size: 1.6rem;
 }

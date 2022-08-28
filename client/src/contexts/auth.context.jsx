@@ -28,11 +28,15 @@ export const AuthProvider = (props) => {
     // loginWithPopup,
     logout,
   } = useAuth0();
+
+  
   const [accessToken, setAccessToken] = useState(null);
 console.log('our auth RR token', accessToken);
+
+
   useEffect(() => {
     const getToken = async () => {
-      console.log("gettng AT", `http://${domain}/api/v1`);
+      console.log("getting AT", `http://${domain}/api/v1`);
       try {
         const Acctoken = await getAccessTokenSilently();
         console.log("GOT AT", Acctoken);
@@ -47,7 +51,7 @@ console.log('our auth RR token', accessToken);
         }
       }
     };
-    if (user) {
+    if (user &&!isLoading && !error) {
       console.log("user", user);
       getToken();
     }

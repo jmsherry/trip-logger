@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { ThemeProvider } from "@mui/system";
+import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from "@mui/material/CssBaseline";
 import { Auth0Provider } from "@auth0/auth0-react";
 
@@ -25,6 +25,9 @@ import { AuthProvider } from "./contexts/auth.context";
 import { PlacesProvider } from "./contexts/places.context";
 import { UsersProvider } from "./contexts/users.context";
 import { TripsProvider } from "./contexts/trips.context";
+
+// UI Context
+import { UIProvider } from "./contexts/ui.context";
 
 // Auth0 Settings
 import history from "./utils/history";
@@ -54,47 +57,49 @@ function App() {
       <Router>
         <Auth0Provider {...providerConfig}>
           <Auth0Wrapper>
-            <AuthProvider>
-              <PlacesProvider>
-                <UsersProvider>
-                  <TripsProvider>
-                    <CssBaseline />
-                    <ThemeProvider theme={theme}>
-                      <Routes>
-                        <Route path="/" element={<PageLayout />}>
-                          <Route index element={<Home />} />
-                          <Route
-                            path="profile"
-                            element={
-                              <ProtectedRoute>
-                                <Profile />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="trips"
-                            element={
-                              <ProtectedRoute>
-                                <Trips />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route
-                            path="trips/add"
-                            element={
-                              <ProtectedRoute>
-                                <AddTrips />
-                              </ProtectedRoute>
-                            }
-                          />
-                          <Route path="*" element={<NotFound />} />
-                        </Route>
-                      </Routes>
-                    </ThemeProvider>
-                  </TripsProvider>
-                </UsersProvider>
-              </PlacesProvider>
-            </AuthProvider>
+            <UIProvider>
+              <AuthProvider>
+                <PlacesProvider>
+                  <UsersProvider>
+                    <TripsProvider>
+                      <CssBaseline enableColorScheme />
+                      <ThemeProvider theme={theme}>
+                        <Routes>
+                          <Route path="/" element={<PageLayout />}>
+                            <Route index element={<Home />} />
+                            <Route
+                              path="profile"
+                              element={
+                                <ProtectedRoute>
+                                  <Profile />
+                                </ProtectedRoute>
+                              }
+                            />
+                            <Route
+                              path="trips"
+                              element={
+                                <ProtectedRoute>
+                                  <Trips />
+                                </ProtectedRoute>
+                              }
+                            />
+                            <Route
+                              path="trips/add"
+                              element={
+                                <ProtectedRoute>
+                                  <AddTrips />
+                                </ProtectedRoute>
+                              }
+                            />
+                            <Route path="*" element={<NotFound />} />
+                          </Route>
+                        </Routes>
+                      </ThemeProvider>
+                    </TripsProvider>
+                  </UsersProvider>
+                </PlacesProvider>
+              </AuthProvider>
+            </UIProvider>
           </Auth0Wrapper>
         </Auth0Provider>
       </Router>

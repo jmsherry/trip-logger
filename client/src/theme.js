@@ -6,11 +6,18 @@ let theme = createTheme({
   palette: {
     primary: {
       main: red[900],
-      contrastText: '#fff'
+      contrastText: "#fff",
     },
     secondary: {
       main: red[50],
-      contrastText: red[900]
+      contrastText: red[900],
+    },
+  },
+  typography: {
+    // Tell MUI what's the font-size on the html element is.
+    htmlFontSize: 10,
+    h1: {
+      fontSize: "5rem",
     },
   },
 });

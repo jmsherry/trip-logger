@@ -1,49 +1,67 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Link } from "react-router-dom";
+import dayjs from "dayjs";
 import { TripsContext } from "./../contexts/trips.context";
 import Button from "@mui/material/Button";
+import IconButton from "@mui/material/IconButton";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 
 function Trips() {
-  const { fetchTrips, trips, loaded, loading } = useContext(TripsContext);
+  const { fetchTrips, trips, loaded, loading, deleteTrip } =
+    useContext(TripsContext);
 
   useEffect(() => {
-    console.log({ trips, loaded, loading });
+    console.log("HERRERERERE", { trips, loaded, loading });
     if (!loaded && !loading) {
-      console.log("calling");
+      console.log("fetching");
       fetchTrips();
     }
-  }, [trips, loaded, loading]);
+  });
 
   return (
     <div>
       <h1>Trips</h1>
-      <pre>
+      {/* <pre>
         <code>{JSON.stringify({ trips, loaded, loading })}</code>
-      </pre>
+      </pre> */}
       <div>
         <Button
           sx={{
             my: 2,
             "&:hover": {
-              color: 'white',
+              color: "white",
             },
           }}
           component={Link}
           to="/trips/add"
-          primary
+          primary="true"
           variant="contained"
         >
           Add a trip!
         </Button>
       </div>
       {trips.length === 0 && <p>No trips listed</p>}
-      <ul>
+      <Box sx={{ width: "100%", maxWidth: 360, bgcolor: "background.paper" }}>
+        <List>
         {trips.map(({ date, place, _id }) => (
-          <li key={_id}>
-            {place.name.common} (Date: {date})
-          </li>
+          <ListItem disablePadding key={_id}>
+            {place.name.common} (Date: {dayjs(date).format("DD/MM/YYYY")})
+            <IconButton
+              aria-label="delete"
+              color="primary"
+              onClick={() => deleteTrip(_id)}
+            >
+              <DeleteIcon />
+            </IconButton>
+          </ListItem>
         ))}
-      </ul>
+        </List>
+      </Box>
+
     </div>
   );
 }

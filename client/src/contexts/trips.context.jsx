@@ -1,8 +1,10 @@
 import React, { createContext, useState, useCallback, useContext } from "react";
+import { UIContext } from "./ui.context";
 import { AuthContext } from "./auth.context";
 
 let headers = {
   "Content-Type": "application/json",
+  "X-Requested-With": "XMLHttpRequest",
   // 'Content-Type': 'application/x-www-form-urlencoded',
 };
 
@@ -18,8 +20,8 @@ export const TripsContext = createContext({
 });
 
 export const TripsProvider = (props) => {
-  const { accessToken, isLoading } = useContext(AuthContext);
-  console.log('TripsProvider RR token', accessToken);
+  const { accessToken } = useContext(AuthContext);
+  const { showMessage } = useContext(UIContext);
 
   const [state, setState] = useState({
     loading: false,
@@ -62,11 +64,11 @@ export const TripsProvider = (props) => {
     [state]
   );
 
-  // const fetchTrips = useCallback(async () => {
-    const fetchTrips = useCallback(async () => {
+  const fetchTrips = useCallback(async () => {
     // console.log('loading', loading);
     // console.log('error', error);
-    console.log("accessToken", accessToken);
+    // console.log('fetchTrips called');
+    // console.log("accessToken", accessToken);
 
     const { loading, loaded, error } = state;
 
@@ -76,6 +78,7 @@ export const TripsProvider = (props) => {
 
     if (!accessToken) {
       console.warn("Call stopped because no access token");
+      return;
     }
 
     setLoading();
@@ -89,10 +92,10 @@ export const TripsProvider = (props) => {
       }
       const data = await response.json();
       setTrips(data);
-      // console.log('trips from context', trips);
     } catch (err) {
       console.log("err", err);
       setError(err);
+      showMessage({ type: "error", message: `Error: Failed to load trips` });
     }
   }, [accessToken, setError, setLoading, setTrips, state]);
 
@@ -115,15 +118,11 @@ export const TripsProvider = (props) => {
         const savedTrip = await response.json();
         console.log("got data", savedTrip);
         setTrips([...trips, savedTrip]);
-        // addToast(`Saved ${savedTrip.title}`, {
-        //   appearance: "success",
-        // });
+        showMessage({ type: "success", message: `Added ${savedTrip.place}` });
       } catch (err) {
         console.log(err);
         setState(err);
-        // addToast(`Error ${err.message || err.statusText}`, {
-        //   appearance: "error",
-        // });
+        showMessage({ type: "error", message: `Error: Failed to add trip` });
       }
     },
     [accessToken, /*addToast,*/ setLoading, setTrips, state]
@@ -175,15 +174,14 @@ export const TripsProvider = (props) => {
           updatedTrips
         );
         setTrips(updatedTrips);
-        // addToast(`Updated ${newTrip.title}`, {
-        //   appearance: "success",
-        // });
+        showMessage({ type: "success", message: `Updated ${newTrip.place}` });
       } catch (err) {
         console.log(err);
         setError(err);
-        // addToast(`Error: Failed to update ${newTrip.title}`, {
-        //   appearance: "error",
-        // });
+        showMessage({
+          type: "error",
+          message: `Error: Failed to update ${newTrip.place}`,
+        });
       }
     },
     [accessToken, /*addToast,*/ setError, setLoading, setTrips, state]
@@ -191,6 +189,7 @@ export const TripsProvider = (props) => {
 
   const deleteTrip = useCallback(
     async (id) => {
+      console.log("calling deleteTrip", accessToken);
       if (!accessToken) return;
       let deletedTrip = null;
       setLoading();
@@ -212,15 +211,17 @@ export const TripsProvider = (props) => {
           ...trips.slice(index + 1),
         ];
         setTrips(updatedTrips);
-        // addToast(`Deleted ${deletedTrip.title}`, {
-        //   appearance: "success",
-        // });
+        showMessage({
+          type: "success",
+          message: `Deleted ${deletedTrip.place}`,
+        });
       } catch (err) {
         console.log(err);
         setError(err);
-        // addToast(`Error: Failed to update ${deletedTrip.title}`, {
-        //   appearance: "error",
-        // });
+        showMessage({
+          type: "error",
+          message: `Error: Failed to delete ${deletedTrip.place}`,
+        });
       }
     },
     [accessToken, /*addToast,*/ setError, setLoading, setTrips, state]
@@ -239,7 +240,7 @@ export const TripsProvider = (props) => {
         deleteTrip,
       }}
     >
-      {JSON.stringify(accessToken)}
+      {/* {JSON.stringify(accessToken)} */}
       {props.children}
     </TripsContext.Provider>
   );

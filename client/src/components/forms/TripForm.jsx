@@ -21,8 +21,8 @@ const schema = yup.object().shape({
 
 function TripForm() {
   const defaultValues = {
-    date: "",
-    place: null,
+    date: null,
+    place: '',
   };
 
   const { addTrip } = useContext(TripsContext);
@@ -43,7 +43,9 @@ function TripForm() {
     console.log("formValues", formValues);
     // treat data
     formValues.date = dayjs(formValues.date).format("YYYY-MM-DD"); // format
-    formValues.place = places.find((place) => place.name.common === formValues.place)?._id;
+    formValues.place = places.find(
+      (place) => place.name.common === formValues.place
+    )?._id;
     console.log("re-formatted formValues", formValues);
     addTrip(formValues);
     // reset(defaultValues);
@@ -75,15 +77,14 @@ function TripForm() {
               {option.name.common} ({option.cca3})
             </Box>
           )}
-          renderInput={(params) => (
+          renderInput={({ formState, fieldState, ...params }) => (
             <TextField
               {...params}
               label="Choose a destination"
-              margin="normal"
               error={errors.place}
+              // defaultValue={null}
             />
           )}
-          defaultValue={null}
         />
       </div>
       <div style={{ margin: "15px auto" }}>
@@ -97,7 +98,7 @@ function TripForm() {
         {isValid ? "true" : "false"}
       </div> */}
       <div style={{ margin: "15px auto" }}>
-        <Button onClick={() => reset(defaultValues)}>Reset</Button>
+        <Button onClick={() => reset({...defaultValues})}>Reset</Button>
         <Button
           type="submit"
           variant="contained"
@@ -107,6 +108,7 @@ function TripForm() {
           Add Trip
         </Button>
       </div>
+      {/* {JSON.stringify(places)} */}
     </form>
   );
 }

@@ -1,13 +1,14 @@
-import React, {useState, useEffect} from 'react'
-import TripForm from '../components/forms/TripForm'
+import React, { useState, useEffect } from "react";
+import TripForm from "../components/forms/TripForm";
+import Typography from "@mui/material/Typography";
 
 function Trips() {
   return (
     <div>
-      <h1>Add a Trip</h1>
+      <Typography variant="h1">Add a Trip</Typography>
       <TripForm />
     </div>
-  )
+  );
 }
 
-export default Trips
+export default Trips;

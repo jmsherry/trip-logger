@@ -21,23 +21,25 @@ const CountriesSelect = ({
       <Controller
         render={(props) => (
           <>
-            {console.log(props)}
+            {console.log("controller props", props.field)}
             <Autocomplete
+              {...props}
               options={options}
               sx={{ width: 300 }}
               getOptionLabel={getOptionLabel}
               renderOption={renderOption}
               renderInput={renderInput}
-              onChange={(e, data) => {
-                console.log(props);
-                props.field.onChange(data.name.common)
+              onChange={(e, data, reason) => {
+                console.log("oc", reason);
+                // console.log(props);
+                props.field.onChange(data.name.common);
               }}
-              {...props}
+              // value={props?.field?.value || ''}
             />
           </>
         )}
         onChange={([, data]) => data}
-        defaultValue={defaultValue}
+        // defaultValue={defaultValue}
         name={name}
         control={control}
       />

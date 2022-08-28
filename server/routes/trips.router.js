@@ -10,7 +10,7 @@ import {
   // getOwnTrips,
   addOwnTrip,
   // updateOwnTrip,
-  // removeOwnTrip,
+  removeOwnTrip,
 } from "../controllers/trips.controller.js";
 
 import { checkJwt } from '../auth0/authz.middleware.js';
@@ -30,8 +30,8 @@ router
     getUsersTrips
   )
   .post("/", checkJwt, addOwnTrip)
-  // .put("/:id", updateTrip)
-  // .delete("/:id", removeTrip)
+  // .put("/:id", checkJwt, updateTrip)
+  .delete("/:id", checkJwt, removeOwnTrip)
   
 
 export default router;
